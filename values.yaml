@@ -72,7 +72,7 @@ k8s-monitoring:
           cpu: 20m
           memory: 150Mi
   alloy-profiles:
-    enabled: true
+    enabled: false
   alloy-receiver:
     enabled: true
     alloy:
@@ -89,10 +89,10 @@ k8s-monitoring:
           port: 4318
           targetPort: 4318
           protocol: TCP
-        - name: profiles
-          port: 4040
-          targetPort: 4040
-          protocol: TCP
+        # - name: profiles
+        #   port: 4040
+        #   targetPort: 4040
+        #   protocol: TCP
   applicationObservability:
     enabled: true
     receivers:
@@ -109,11 +109,11 @@ k8s-monitoring:
   prometheusOperatorObjects:
     enabled: false
   profiling:
-    enabled: true
+    enabled: false
     ebpf:
-      enabled: false  # can be set to true if pyroscope is disabled
+      enabled: true  # can be set to true if pyroscope is disabled
   profilesReceiver:
-    enabled: true
+    enabled: false
   destinations:
     - name: prometheus
       type: prometheus
@@ -126,9 +126,9 @@ k8s-monitoring:
       url: http://${release_name}-tempo:4317
       traces:
         enabled: true
-    - name: pyroscope
-      type: pyroscope
-      url: http://${release_name}-pyroscope:4040
+    # - name: pyroscope
+    #   type: pyroscope
+    #   url: http://${release_name}-pyroscope:4040
   alerting:
     enabled: true
     alertmanager:
@@ -287,12 +287,12 @@ kube-prom-stack:
           datasourceUid: prometheus
         nodeGraph:
           enabled: true
-    - name: Pyroscope
-      type: phlare
-      uid: pyroscope
-      orgId: 1
-      url: http://{{ .Release.Name }}-pyroscope:4040
-      access: proxy
+    # - name: Pyroscope
+    #   type: phlare
+    #   uid: pyroscope
+    #   orgId: 1
+    #   url: http://{{ .Release.Name }}-pyroscope:4040
+    #   access: proxy
     grafana.ini:
       dashboards:
         default_home_dashboard_path: /tmp/dashboards/alert-history.json
@@ -387,18 +387,18 @@ kube-prom-stack:
         group_wait: 30s
         group_interval: 5m
         repeat_interval: 12h
-        receiver: 'alertsnitch'
+        receiver: 'slack-notifications'
         routes:
-          - receiver: 'alertsnitch'
-            continue: true
+          # - receiver: 'alertsnitch'
+          #   continue: true
           - receiver: 'slack-notifications'
             matchers:
               - severity = critical
       receivers:
-      - name: 'alertsnitch'
-        webhook_configs:
-        - url: 'http://alertsnitch:9567/webhook'
-          send_resolved: true
+      # - name: 'alertsnitch'
+      #   webhook_configs:
+      #   - url: 'http://alertsnitch:9567/webhook'
+      #     send_resolved: true
       - name: 'slack-notifications'
         slack_configs:
           - channel: '#k8s-ops'
@@ -446,7 +446,7 @@ tempo:
 
 # https://github.com/grafana/pyroscope/blob/main/operations/pyroscope/helm/pyroscope/values.yaml
 pyroscope:
-  enabled: true
+  enabled: false
   pyroscope:
     resources:
       limits:
@@ -477,4 +477,4 @@ blackboxProbeTargets:
   - https://another.example.com
 
 alertsnitch:
-  enabled: true
+  enabled: false
