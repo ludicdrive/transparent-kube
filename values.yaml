@@ -330,15 +330,15 @@ kube-prom-stack:
           gnetId: 13659
           revision: 1
           datasource: prometheus
-      cost-management:
-        opencost-overview:
-          gnetId: 22208
-          revision: 4
-          datasource: prometheus
-        opencost-namespace:
-          gnetId: 22252
-          revision: 5
-          datasource: prometheus
+      # cost-management:
+      #   opencost-overview:
+      #     gnetId: 22208
+      #     revision: 4
+      #     datasource: prometheus
+      #   opencost-namespace:
+      #     gnetId: 22252
+      #     revision: 5
+      #     datasource: prometheus
     resources:
       limits:
         cpu: 500m
